@@ -1,0 +1,11 @@
+[indexes/ig_index]
+owner = admin
+version = 7.0.0
+modtime = 1511350637.313406000
+
+[inputs/http%3A%2F%2FIG%20data%20in]
+access = read : [ admin ], write : [ admin ]
+export = none
+owner = admin
+version = 7.0.0
+modtime = 1511350648.942231000
