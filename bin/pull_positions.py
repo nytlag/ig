@@ -12,7 +12,8 @@ logger.setLevel(logging.DEBUG)
 
 # get the login details from the configuration file
 config = ConfigParser.RawConfigParser()
-config.read('configuration')
+config.read('/opt/splunk/etc/apps/ig/local/configuration')
+
 
 try :
     ig_username = config.get("ig","username")
@@ -88,13 +89,16 @@ position_response_str = ig_connection.getresponse().read(10000000)
 logger.debug(position_response_str)
 position_response_json = json.loads(position_response_str)
 
+payload=""
+
 for position in position_response_json["positions"]:
     # create the body for logging in
-    position = json.dumps(position)
-    print position
-    splunk_positions_body = '{"sourcetype": "ig-position", "event":' + json.dumps(position) + '}'
-    splunk_connection.request("POST", splunk_collection_url, body=splunk_positions_body, headers=splunk_headers)
-    print splunk_connection.getresponse()
+    position_str = json.dumps(position)
+    payload += '{"sourcetype": "ig-position", "event":' + position_str + '}'
+
+    
+logger.debug("sending ... " + payload)
+splunk_connection.request("POST", splunk_collection_url, body=payload, headers=splunk_headers)
 
 
 
